@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ch.qos.logback.core.boolex.Matcher;
 
 @Controller
 @RequestMapping(path="/users")
@@ -55,6 +54,7 @@ public class MainController {
 	
 	}
 
+	// TODO : Restrict scope in later iterations
 	@GetMapping(path = "/list")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		// Returns JSON/XML of Users

@@ -31,6 +31,8 @@ A simple server (endpoint) for managing an online bookstore web application for 
    ( Unit Testing will be implemented in later commits )
    ```bash
       
+    # User Operations
+
       # Adding Users
       $ curl localhost:8080/users/add -d email=abc@gmail.com -d password=12345678
         # Result : success
@@ -42,9 +44,29 @@ A simple server (endpoint) for managing an online bookstore web application for 
         # Result : invalid_password
    
       # Lists all users
-      $ curl 'localhost:8080/users/list'
+      $ curl localhost:8080/users/list
+
+    ```
+    ```bash
+    
+      # Inventory Operations
+
+      # Add new Book
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1
+        # Result : book_added
+      $ curl localhost:8080/books/add -d bookId=-1 -d name=Spring -d quantity=1
+        # Result : invalid_book_id
+      $ curl localhost:8080/books/add -d bookId=1 -d name=A -d quantity=1
+        # Result : invalid_book_name
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=0
+        # Result : invalid_book_quantity
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1
+        # Result : invalid_operation
+
+      # List Books
+      $ curl localhost:8080/books/list
       
-   ```
+    ```
    
 4. Restarting **mysql** instance :
    ```bash
