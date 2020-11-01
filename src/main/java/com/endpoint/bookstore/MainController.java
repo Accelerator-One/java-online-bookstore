@@ -1,5 +1,7 @@
 package com.endpoint.bookstore;
 
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import ch.qos.logback.core.boolex.Matcher;
 
 @Controller
 @RequestMapping(path="/users")
@@ -18,16 +22,40 @@ public class MainController {
 	@PostMapping(path="/add")
 	public @ResponseBody String addNewUser (@RequestParam String email, @RequestParam String password) {
 		
-		User n = new User();
-		n.setEmail(email);
-        n.setPassword(password);
+		// Validation
+		if(password.length()<8)
+			return "invalid_password";
+		
+		if(!validEmail(email))
+			return "invalid_email";
 
-		userRepository.save(n);
-        return "200";
-        
+		// Start Generating Entry
+		User n = new User();
+		
+		// Check if entry not present already
+		try {
+			
+			n.setEmail(email);
+        	n.setPassword(password);
+			userRepository.save(n);
+
+		} catch(Exception e) {
+			return "user_already_present";
+		}
+
+        return "successful";        
 	}
 
-	@GetMapping(path="/list")
+	// Validate Email
+	private boolean validEmail(String email) {
+
+		Pattern pattern = Pattern.compile("[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9._-]+");
+		java.util.regex.Matcher matcher = pattern.matcher(email);
+		return matcher.find();
+	
+	}
+
+	@GetMapping(path = "/list")
 	public @ResponseBody Iterable<User> getAllUsers() {
 		// Returns JSON/XML of Users
 		return userRepository.findAll();
