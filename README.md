@@ -93,7 +93,8 @@ A simple server (endpoint) for managing an online bookstore web application for 
       $ curl localhost:8080/purchase/list/all -d secretKey=SECRET_KEY
 
       # List all purchases by Email ( * Verification in later iteration )
-      $ curl localhost:8080/purchase/list/user -d email=abc@gmail.com
+      $ curl localhost:8080/purchase/list/user -d email=abc@gmail.com -d password=12345678
+        # Result : Returns purchases if correct credentials otherwise 'null'
  
       # List all purchases by bookId (Admin Only)
       $ curl localhost:8080/purchase/list/book -d bookId=1 -d secretKey=SECRET_KEY

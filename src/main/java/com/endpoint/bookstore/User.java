@@ -13,7 +13,7 @@ public class User {
 	@Id
   	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -26,13 +26,14 @@ public class User {
 	@Column(unique=true)
 	private String email;
 	private String password;
+	private Long timestamp;
 
-	// Setter methods
-	public void setEmail(String email) {
+	protected User() {}
+
+	public User(String email, String password, long timestamp) {
 		this.email = email;
-	}
-	public void setPassword(String password) {
 		this.password = password;
+		this.timestamp = timestamp;
 	}
 
 	// Getter Methods
@@ -41,5 +42,8 @@ public class User {
 	}
 	public String getPassword() {
 		return password;
+	}
+	public Long getTimestamp() {
+		return timestamp;
 	}
 }

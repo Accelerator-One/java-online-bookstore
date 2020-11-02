@@ -2,6 +2,8 @@ package com.endpoint.bookstore;
 
 import java.time.Instant;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(path="/purchase")
 public class PurchaseController {
-    
+	
+	private Boolean authFlag;
+	private static final Logger log = LoggerFactory.getLogger(PurchaseController.class);
+
     @Autowired
 	private PurchaseRepository purchase;
+	@Autowired
+	private UserRepository user;
 
 	// Validate Email
 	private boolean validEmail(String email) {
@@ -80,9 +87,18 @@ public class PurchaseController {
 	
     // List books for Email
 	@PostMapping(path = "/list/user")
-	public @ResponseBody Iterable<Purchase> getAllBooks(@RequestParam String email) {
-		// TODO : Verify user credentials before fetching data
-		return purchase.findByEmail(email);
+	public @ResponseBody Iterable<Purchase> getAllBooks(@RequestParam String email,@RequestParam String password) {
+		
+		Iterable <User> it = user.findByEmail(email);
+		// log.info("------------------------");
+		it.forEach(data->{
+			authFlag = password.equals(data.getPassword());
+		});
+		// log.info("------------------------");
+		if(authFlag)
+			return purchase.findByEmail(email);
+		
+		return null;
     }
 
 }

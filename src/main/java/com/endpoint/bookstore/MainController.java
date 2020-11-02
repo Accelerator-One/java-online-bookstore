@@ -1,5 +1,6 @@
 package com.endpoint.bookstore;
 
+import java.time.Instant;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,14 @@ public class MainController {
 			return "invalid_email";
 
 		// Start Generating Entry
-		User n = new User();
+		User user;
 		
 		// Check if entry not present already
 		try {
 			
-			// TODO: Add registration timestamp in later iterations
-			n.setEmail(email);
-        	n.setPassword(password);
-			userRepository.save(n);
+			Instant instant = Instant.now();
+			user = new User(email,password,instant.toEpochMilli());
+			userRepository.save(user);
 
 		} catch(Exception e) {
 			return "user_already_present";
