@@ -2,7 +2,6 @@ package com.endpoint.bookstore;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +14,11 @@ public class DataController {
     
     @Autowired
 	private InventoryRepository bookEntry;
+
+	@Autowired
+	private UserRepository user;
+
+	private Boolean authFlag;
 
 	// Adds new book
 	// TODO : If book already present with same 'bookId' & 'name', update entry ('entry_updated') otherwise 'invalid_operation'
@@ -50,9 +54,18 @@ public class DataController {
 	}
 
     // List books for Users
-	@GetMapping(path = "/list")
-	public @ResponseBody Iterable<Inventory> getAllUsers() {
-		// TODO : Allow only logged in users to access data in later iterations
-		return bookEntry.findAll();
+	@PostMapping(path = "/list")
+	public @ResponseBody Iterable<Inventory> getAllUsers(@RequestParam String email,@RequestParam String password) {
+		
+		Iterable <User> it = user.findByEmail(email);
+
+		it.forEach(data->{
+			authFlag = data.getPassword().equals(password);
+		});
+		
+		if(authFlag)
+			return bookEntry.findAll();
+
+		return null;
 	}
 }

@@ -68,8 +68,8 @@ A simple server (endpoint) for managing an online bookstore web application for 
       $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
         # Result : book_entry_present ( BUG : Duplicate Entry to tackle later )
 
-      # List Books
-      $ curl localhost:8080/books/list
+      # List Books ( Authorized Users Only )
+      $ curl localhost:8080/books/list -d email=abc@gmail.com -d password=12345678
       
     ```
     ```bash
@@ -92,9 +92,8 @@ A simple server (endpoint) for managing an online bookstore web application for 
       # List all purchases (Admin Only)
       $ curl localhost:8080/purchase/list/all -d secretKey=SECRET_KEY
 
-      # List all purchases by Email ( * Verification in later iteration )
+      # List all purchases by Email ( Authorized Users Only )
       $ curl localhost:8080/purchase/list/user -d email=abc@gmail.com -d password=12345678
-        # Result : Returns purchases if correct credentials otherwise 'null'
  
       # List all purchases by bookId (Admin Only)
       $ curl localhost:8080/purchase/list/book -d bookId=1 -d secretKey=SECRET_KEY
