@@ -4,7 +4,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +33,7 @@ public class MainController {
 		// Check if entry not present already
 		try {
 			
+			// TODO: Add registration timestamp in later iterations
 			n.setEmail(email);
         	n.setPassword(password);
 			userRepository.save(n);
@@ -54,10 +54,14 @@ public class MainController {
 	
 	}
 
-	// TODO : Restrict scope in later iterations
-	@GetMapping(path = "/list")
-	public @ResponseBody Iterable<User> getAllUsers() {
-		// Returns JSON/XML of Users
-		return userRepository.findAll();
+	@PostMapping(path = "/list")
+	public @ResponseBody Iterable<User> getAllUsers(@RequestParam String secretKey) {
+		
+		// Returns JSON/XML of Users if secret-key matches (accessible to admins only)
+		if(secretKey.equals("SECRET_KEY"))
+			return userRepository.findAll();
+
+		return null;
+		
 	}
 }

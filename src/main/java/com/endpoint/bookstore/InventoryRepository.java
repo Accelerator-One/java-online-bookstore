@@ -7,6 +7,5 @@ import com.endpoint.bookstore.Inventory;
 // CRUD refers Create, Read, Update, Delete
 
 public interface InventoryRepository extends CrudRepository<Inventory, Integer> {
-    // TODO : Add Functionality to query data on certain regex in search box
-    // OPTIONAL : Add Filter data on certain params (as present in online stores)
+
 }

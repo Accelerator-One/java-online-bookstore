@@ -19,8 +19,8 @@ public class Purchase {
 	}
 
     private Integer bookId,quantity;
-	  private String email;
-	  private Long timestamp;
+	private String email;
+	private Long timestamp;
 
     protected Purchase() {}
 

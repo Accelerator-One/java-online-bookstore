@@ -43,25 +43,30 @@ A simple server (endpoint) for managing an online bookstore web application for 
       $ curl localhost:8080/users/add -d email=abcde@gmail.com -d password=1234
         # Result : invalid_password
    
-      # Lists all users
+      # Lists all users ( Only correct secretKey will return a JSON response )
       $ curl localhost:8080/users/list
+        # Result : 405 status error message
+      $ curl localhost:8080/users/list -d secretKey=SECRET_KEY
+        # Result : [ JSON_Response: Registered_Users ]
 
     ```
     ```bash
     
       # Inventory Operations
 
-      # Add new Book
+      # Add new Book (Only correct secretKey will add book in the inventory)
       $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1
+        # Result : 405 status error message
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
         # Result : book_added
-      $ curl localhost:8080/books/add -d bookId=-1 -d name=Spring -d quantity=1
+      $ curl localhost:8080/books/add -d bookId=-1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
         # Result : invalid_book_id
-      $ curl localhost:8080/books/add -d bookId=1 -d name=A -d quantity=1
+      $ curl localhost:8080/books/add -d bookId=1 -d name=A -d quantity=1 -d secretKey=SECRET_KEY
         # Result : invalid_book_name
-      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=0
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=0  -d secretKey=SECRET_KEY
         # Result : invalid_book_quantity
-      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1
-        # Result : invalid_operation
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
+        # Result : book_entry_present ( BUG : Duplicate Entry to tackle later )
 
       # List Books
       $ curl localhost:8080/books/list
@@ -69,20 +74,29 @@ A simple server (endpoint) for managing an online bookstore web application for 
     ```
     ```bash
 
-      # Purchase Operations
+      # Purchase Operations ( User Credential verification to add later )
 
       # Add purchase
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@.com -d quantity=1
+        # Result : invalid_email
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=0
+        # Result : invalid_quantity
+      $ curl localhost:8080/purchase/add -d bookId=-1 -d email=abc@gmail.com -d quantity=1
+        # Result : invalid_bookId
       $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1
-        # Result : purchase_complete
-      
-      # List all purchases
-      $ curl localhost:8080/purchase/list/all
+        # Result : purchase_complete ( BUG : Duplicate Entry to tackle later )
 
-      # List all purchases by Email
+      # All other invalid operations and failed transactions will flag 'invalid_operation'
+      
+
+      # List all purchases (Admin Only)
+      $ curl localhost:8080/purchase/list/all -d secretKey=SECRET_KEY
+
+      # List all purchases by Email ( * Verification in later iteration )
       $ curl localhost:8080/purchase/list/user -d email=abc@gmail.com
  
-      # List all purchases by bookId
-      $ curl localhost:8080/purchase/list/book -d bookId=1 
+      # List all purchases by bookId (Admin Only)
+      $ curl localhost:8080/purchase/list/book -d bookId=1 -d secretKey=SECRET_KEY
  
     ```   
 

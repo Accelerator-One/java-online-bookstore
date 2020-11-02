@@ -16,11 +16,15 @@ public class DataController {
     @Autowired
 	private InventoryRepository bookEntry;
 
-    // Adds new book
-    // TODO : make access-scope restricted in later iterations
+	// Adds new book
+	// TODO : If book already present with same 'bookId' & 'name', update entry ('entry_updated') otherwise 'invalid_operation'
 	@PostMapping(path="/add")
-	public @ResponseBody String addNewBook (@RequestParam Integer bookId, @RequestParam String name, @RequestParam Integer quantity) {
+	public @ResponseBody String addNewBook (@RequestParam Integer bookId, @RequestParam String secretKey,
+				 @RequestParam String name, @RequestParam Integer quantity) {
 		
+		if(!secretKey.equals("SECRET_KEY"))
+		    return "not_authorized";
+
 		// Validation
 		if(name.length()<2)
 			return "invalid_book_name";
@@ -48,6 +52,7 @@ public class DataController {
     // List books for Users
 	@GetMapping(path = "/list")
 	public @ResponseBody Iterable<Inventory> getAllUsers() {
+		// TODO : Allow only logged in users to access data in later iterations
 		return bookEntry.findAll();
 	}
 }

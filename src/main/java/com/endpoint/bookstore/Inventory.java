@@ -1,5 +1,6 @@
 package com.endpoint.bookstore;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +21,11 @@ public class Inventory {
 		this.id = id;
 	}
 
-    private Integer bookId, quantity;
+	// Setting 'bookId' as field
+	@Column(unique = true)
+	private Integer bookId;
+
+	private Integer quantity;
   	private String name;
 
 	protected Inventory() {}
