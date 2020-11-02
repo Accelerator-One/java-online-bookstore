@@ -67,7 +67,25 @@ A simple server (endpoint) for managing an online bookstore web application for 
       $ curl localhost:8080/books/list
       
     ```
-   
+    ```bash
+
+      # Purchase Operations
+
+      # Add purchase
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1
+        # Result : purchase_complete
+      
+      # List all purchases
+      $ curl localhost:8080/purchase/list/all
+
+      # List all purchases by Email
+      $ curl localhost:8080/purchase/list/user -d email=abc@gmail.com
+ 
+      # List all purchases by bookId
+      $ curl localhost:8080/purchase/list/book -d bookId=1 
+ 
+    ```   
+
 4. Restarting **mysql** instance :
    ```bash
       $ ps ax | grep sql
