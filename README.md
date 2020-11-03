@@ -1,5 +1,5 @@
 # java-online-bookstore
-[ UNDER DEVELOPMENT ]  
+( MVP Iteration Complete -> Next Iteration to start after frontend is completed by team members )
 A simple server (endpoint) for managing an online bookstore web application for semester-project 2020
 
 ## Dependencies
@@ -43,9 +43,9 @@ A simple server (endpoint) for managing an online bookstore web application for 
       $ curl localhost:8080/users/add -d email=abcde@gmail.com -d password=1234
         # Result : invalid_password
    
-      # Lists all users ( Only correct secretKey will return a JSON response )
-      $ curl localhost:8080/users/list
-        # Result : 405 status error message
+      # Lists all users (Admin Access Scope only)
+      $ curl localhost:8080/users/list -d secretKey=FAKE_ENTRY
+        # Result : < NO_RESPONSE >
       $ curl localhost:8080/users/list -d secretKey=SECRET_KEY
         # Result : [ JSON_Response: Registered_Users ]
 
@@ -54,21 +54,21 @@ A simple server (endpoint) for managing an online bookstore web application for 
     
       # Inventory Operations
 
-      # Add new Book (Only correct secretKey will add book in the inventory)
-      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1
-        # Result : 405 status error message
+      # Add new Book (Admin Access Scope only)
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1 -d secretKey=FAKE_ENTRY
+        # Result : not_authorized
       $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
         # Result : book_added
+      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
+        # Result : entry_updated
       $ curl localhost:8080/books/add -d bookId=-1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
         # Result : invalid_book_id
       $ curl localhost:8080/books/add -d bookId=1 -d name=A -d quantity=1 -d secretKey=SECRET_KEY
         # Result : invalid_book_name
       $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=0  -d secretKey=SECRET_KEY
         # Result : invalid_book_quantity
-      $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
-        # Result : book_added
 
-      # List Books ( Authorized Users Only )
+      # List Books (Authorized User Access Level Scope)
       $ curl localhost:8080/books/list -d email=abc@gmail.com -d password=12345678
       
     ```
@@ -77,16 +77,18 @@ A simple server (endpoint) for managing an online bookstore web application for 
       # Purchase Operations
 
       # Add purchase
-      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@.com -d quantity=1
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@.com -d quantity=1 -d password=12345678
         # Result : invalid_email
-      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=0
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=0 -d password=12345678
         # Result : invalid_quantity
-      $ curl localhost:8080/purchase/add -d bookId=-1 -d email=abc@gmail.com -d quantity=1
+      $ curl localhost:8080/purchase/add -d bookId=-1 -d email=abc@gmail.com -d quantity=1 -d password=12345678
         # Result : invalid_bookId
       $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1 -d password=12345988
         # Result : invalid_user_credentials
       $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1 -d password=12345678
         # Result : purchase_complete
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=100 -d password=12345678
+        # Result : insufficient_stock
 
       # Any invalid operation / failed transaction will flag 'invalid_operation'
       
@@ -94,7 +96,7 @@ A simple server (endpoint) for managing an online bookstore web application for 
       # List all purchases (Admin Only)
       $ curl localhost:8080/purchase/list/all -d secretKey=SECRET_KEY
 
-      # List all purchases by Email ( Authorized Users Only )
+      # List all purchases by Email ( Authorized User Access Level Scope )
       $ curl localhost:8080/purchase/list/user -d email=abc@gmail.com -d password=12345678
  
       # List all purchases by bookId (Admin Only)
