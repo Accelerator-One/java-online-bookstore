@@ -84,7 +84,9 @@ A simple server (endpoint) for managing an online bookstore web application for 
       $ curl localhost:8080/purchase/add -d bookId=-1 -d email=abc@gmail.com -d quantity=1
         # Result : invalid_bookId
       $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1
-        # Result : purchase_complete ( BUG : Duplicate Entry to tackle later )
+        # Result : purchase_complete
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1
+        # Result : entry_updated ( For Duplicate Entries )
 
       # All other invalid operations and failed transactions will flag 'invalid_operation'
       

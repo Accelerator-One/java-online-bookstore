@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping(path="/books")
@@ -19,9 +21,13 @@ public class DataController {
 	private UserRepository user;
 
 	private Boolean authFlag;
+	private Boolean entryPresent;
+	private Integer getQuantity;
+
+	// private static final Logger log = LoggerFactory.getLogger(PurchaseController.class);
+
 
 	// Adds new book
-	// TODO : If book already present with same 'bookId' & 'name', update entry ('entry_updated') otherwise 'invalid_operation'
 	@PostMapping(path="/add")
 	public @ResponseBody String addNewBook (@RequestParam Integer bookId, @RequestParam String secretKey,
 				 @RequestParam String name, @RequestParam Integer quantity) {
@@ -36,6 +42,21 @@ public class DataController {
             return "invalid_book_id";
         if(quantity <= 0)
             return "invalid_book_quantity";
+
+		entryPresent = false;
+
+		// Check if record exists and update if present
+		Iterable <Inventory> info = bookEntry.findByBookId(bookId);
+		info.forEach(data->{
+			entryPresent = true;
+			getQuantity = data.getQuantity();
+		});
+
+		if(entryPresent) {
+			// Add to current entry if present
+			bookEntry.updateEntry(bookId,quantity+getQuantity);
+			return "entry_updated";
+		}
 
 		// Start Generating Entry
 		Inventory book;
