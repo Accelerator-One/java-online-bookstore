@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PurchaseController {
 	
 	private Boolean authFlag;
+	private Integer stockCount;
 	// private static final Logger log = LoggerFactory.getLogger(PurchaseController.class);
 
     @Autowired
 	private PurchaseRepository purchase;
 	@Autowired
 	private UserRepository user;
+	@Autowired
+	private InventoryRepository inventory;
 
 	// Validate Email
 	private boolean validEmail(String email) {
@@ -36,7 +39,7 @@ public class PurchaseController {
 
     // Add Purchase entry
 	@PostMapping(path="/add")
-	public @ResponseBody String addPurchaseEntry(@RequestParam Integer bookId, @RequestParam String email, @RequestParam Integer quantity) {
+	public @ResponseBody String addPurchaseEntry(@RequestParam Integer bookId, @RequestParam String email, @RequestParam Integer quantity,@RequestParam String password) {
 		
 		if(!validEmail(email))
 			return "invalid_email";
@@ -45,8 +48,25 @@ public class PurchaseController {
 		if(bookId<0)
 			return "invalid_bookId";
 
-		// TODO : Validate user credentials
-		// TODO : Check if stock available in inventory
+		Iterable <User> it = user.findByEmail(email);
+		it.forEach(data -> {
+			authFlag = password.equals(data.getPassword());
+		});
+		if(!authFlag)
+			return "invalid_user_credentials";
+
+		// Check if stock available in inventory
+		Iterable <Inventory> stock = inventory.findByBookId(bookId);
+		stock.forEach(data->{
+			stockCount = data.getQuantity();
+		});
+
+		if(stockCount < quantity ) {
+			return "insuffucient_stock";
+		}
+
+		// If sufficient stock, update quantity
+		inventory.updateEntry(bookId,stockCount-quantity);
 
 		// Start Generating Entry
 		Purchase transaction;

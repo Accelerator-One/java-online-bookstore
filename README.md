@@ -66,7 +66,7 @@ A simple server (endpoint) for managing an online bookstore web application for 
       $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=0  -d secretKey=SECRET_KEY
         # Result : invalid_book_quantity
       $ curl localhost:8080/books/add -d bookId=1 -d name=Spring -d quantity=1  -d secretKey=SECRET_KEY
-        # Result : book_entry_present ( BUG : Duplicate Entry to tackle later )
+        # Result : book_added
 
       # List Books ( Authorized Users Only )
       $ curl localhost:8080/books/list -d email=abc@gmail.com -d password=12345678
@@ -74,7 +74,7 @@ A simple server (endpoint) for managing an online bookstore web application for 
     ```
     ```bash
 
-      # Purchase Operations ( User Credential verification to add later )
+      # Purchase Operations
 
       # Add purchase
       $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@.com -d quantity=1
@@ -83,12 +83,12 @@ A simple server (endpoint) for managing an online bookstore web application for 
         # Result : invalid_quantity
       $ curl localhost:8080/purchase/add -d bookId=-1 -d email=abc@gmail.com -d quantity=1
         # Result : invalid_bookId
-      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1 -d password=12345988
+        # Result : invalid_user_credentials
+      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1 -d password=12345678
         # Result : purchase_complete
-      $ curl localhost:8080/purchase/add -d bookId=1 -d email=abc@gmail.com -d quantity=1
-        # Result : entry_updated ( For Duplicate Entries )
 
-      # All other invalid operations and failed transactions will flag 'invalid_operation'
+      # Any invalid operation / failed transaction will flag 'invalid_operation'
       
 
       # List all purchases (Admin Only)
