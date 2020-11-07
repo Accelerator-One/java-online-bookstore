@@ -1,4 +1,9 @@
-package com.endpoint.bookstore;
+package com.endpoint.bookstore.Controller;
+
+import com.endpoint.bookstore.Entity.Inventory;
+import com.endpoint.bookstore.Entity.User;
+import com.endpoint.bookstore.Repository.InventoryRepository;
+import com.endpoint.bookstore.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(path="/books")
-public class DataController {
+public class InventoryController {
     
     @Autowired
 	private InventoryRepository bookEntry;

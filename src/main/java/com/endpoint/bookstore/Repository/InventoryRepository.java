@@ -1,4 +1,4 @@
-package com.endpoint.bookstore;
+package com.endpoint.bookstore.Repository;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.endpoint.bookstore.Inventory;
+import com.endpoint.bookstore.Entity.Inventory;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete

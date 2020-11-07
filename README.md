@@ -1,5 +1,5 @@
 # java-online-bookstore
-( MVP Iteration Complete -> Next Iteration to start after frontend is completed by team members )
+( Project Status : Suspension )
 A simple server (endpoint) for managing an online bookstore web application for semester-project 2020
 
 ## Dependencies

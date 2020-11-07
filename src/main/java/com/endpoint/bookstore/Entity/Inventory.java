@@ -1,4 +1,4 @@
-package com.endpoint.bookstore;
+package com.endpoint.bookstore.Entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +31,7 @@ public class Inventory {
 	protected Inventory() {}
 
 	// Initialize Object
-	Inventory(Integer bookId, String name, Integer quantity) {
+	public Inventory(Integer bookId, String name, Integer quantity) {
         this.bookId = bookId;
         this.name = name;
         this.quantity = quantity;
