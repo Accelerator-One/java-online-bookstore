@@ -1,6 +1,5 @@
 # java-online-bookstore
-( Project Status : Suspension )
-A simple server (endpoint) for managing an online bookstore web application for semester-project 2020
+A simple server ( endpoint ) for managing an online bookstore 
 
 ## Dependencies
 - gradle
@@ -10,27 +9,25 @@ A simple server (endpoint) for managing an online bookstore web application for 
   * spring-boot-starter-web
   * mysql:mysql-connector-java
 
-## Running the Project
+## Initialization
 1. Initialize the data
     - Login to your local mysql instance  
       ```bash
-      
       $ sudo mysql -u root -p
-      
-      > create database bookstore;
-      > create user 'admin'@'%' identified by 'password';
-      > grant all on bookstore.* to 'admin'@'%';
-      
-      ```
-      ( Security Lockup will be implemented in the later iterations )
+        > create database bookstore;
+        > create user 'admin'@'%' identified by 'password';
+        > grant all on bookstore.* to 'admin'@'%';
 
-2. Start the server :  
-   ``$ ./gradlew bootRun``
+      ```
+      ( Security lockup will be implemented in the later iterations )
+
+2. Start the server
+    ```bash 
+    $ ./gradlew bootRun
+    ```
    
-3. Try the following test-cases:  
-   ( Unit Testing will be implemented in later commits )
+3. Test Cases
    ```bash
-      
     # User Operations
 
       # Adding Users
@@ -92,7 +89,6 @@ A simple server (endpoint) for managing an online bookstore web application for 
 
       # Any invalid operation / failed transaction will flag 'invalid_operation'
       
-
       # List all purchases (Admin Only)
       $ curl localhost:8080/purchase/list/all -d secretKey=SECRET_KEY
 
@@ -101,10 +97,10 @@ A simple server (endpoint) for managing an online bookstore web application for 
  
       # List all purchases by bookId (Admin Only)
       $ curl localhost:8080/purchase/list/book -d bookId=1 -d secretKey=SECRET_KEY
- 
+
     ```   
 
-4. Restarting **mysql** instance :
+4. Restarting **mysql** instance
    ```bash
       $ ps ax | grep sql
       # Now kill all MySQL PIDs using **sudo kill** <PID>
@@ -116,3 +112,4 @@ A simple server (endpoint) for managing an online bookstore web application for 
       # Restart Service
       $ sudo service mysql restart
    ```
+\* In case of any problems, please file them under **Issues** section of this repository.
